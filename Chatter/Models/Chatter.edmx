@@ -65,6 +65,18 @@
           <Property Name="ChatMessage" Type="nvarchar" MaxLength="140" Nullable="false" />
           <Property Name="ChatTimestamp" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Chat_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -128,6 +140,10 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Chat_AspNetUsers" Association="Self.FK_Chat_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -157,6 +173,7 @@
           <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ChatMessage" Type="String" MaxLength="140" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ChatTimestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUser" Relationship="ChatterModel.FK_Chat_AspNetUsers" FromRole="Chat" ToRole="AspNetUser" />
         </EntityType>
         <EntityContainer Name="ChatterEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Chats" EntityType="Self.Chat" />
@@ -175,6 +192,10 @@
           <AssociationSet Name="AspNetUserRoles" Association="ChatterModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_AspNetUsers" Association="ChatterModel.FK_Chat_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Chat" EntitySet="Chats" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="AspNetRole">
@@ -225,6 +246,7 @@
           <NavigationProperty Name="AspNetUserClaims" Relationship="ChatterModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="ChatterModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="AspNetRoles" Relationship="ChatterModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <NavigationProperty Name="Chats" Relationship="ChatterModel.FK_Chat_AspNetUsers" FromRole="AspNetUser" ToRole="Chat" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Type="ChatterModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -257,6 +279,18 @@
         <Association Name="AspNetUserRoles">
           <End Type="ChatterModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="ChatterModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_Chat_AspNetUsers">
+          <End Type="ChatterModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="ChatterModel.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>

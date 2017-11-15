@@ -18,5 +18,7 @@ namespace Chatter.Models
         public string UserID { get; set; }
         public string ChatMessage { get; set; }
         public System.DateTime ChatTimestamp { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }
