@@ -20,8 +20,17 @@
             [{ "firstName": "Barbie", "age": 19 }, { "firstName": "Ron", "age": null }]
         }
 
+        var stringTest = jsonTest;
+
         //jQuery
-        $("#response").text(jsonTest.children[1].firstName);
+        $.each(jsonTest."children", function (key, value) {
+            //$.each(arr, function (keyTest, valueTest) {
+            //    console.log(keyTest + ": " + valueTest);
+            //});
+            console.log(key + ": " + value);
+        });
+
+        //$("#response").text(jsonTest.children[1].firstName);
 
         ////JSON . . . Javascript object
         //var jsonTest = { "ID": 1, "userID": 1, "Message": "Hello World" };
